@@ -13,12 +13,6 @@
  */
 namespace Binance;
 
-// PHP version check
-if (version_compare(phpversion(), '7.0', '<=')) {
-    fwrite(STDERR, "Hi, PHP " . phpversion() . " support will be removed very soon as part of continued development.\n");
-    fwrite(STDERR, "Please consider upgrading.\n");
-}
-
 /**
  * Main Binance class
  *
@@ -91,7 +85,7 @@ class API
      * @param $file string the name of the property to return
      * @return null
      */
-    public function __get(string $member)
+    public function __get($member)
     {
         if (property_exists($this, $member)) {
             return $this->$member;
@@ -105,7 +99,7 @@ class API
      * @param $member string the name of the member property
      * @param $value the value of the member property
      */
-    public function __set(string $member, $value)
+    public function __set($member, $value)
     {
         $this->$member = $value;
     }
@@ -118,9 +112,9 @@ class API
      * @param $file string file location
      * @return null
      */
-    private function setupApiConfigFromFile(string $file = null)
+    private function setupApiConfigFromFile($file = null)
     {
-        $file = is_null($file) ? getenv("HOME") . "/.config/jaggedsoft/php-binance-api.json" : $file;
+        $file = $file === null ? getenv("HOME") . "/.config/jaggedsoft/php-binance-api.json" : $file;
 
         if (empty($this->api_key) === false || empty($this->api_key) === false) {
             return;
@@ -143,9 +137,9 @@ class API
      * @param $file string file location
      * @return null
      */
-    private function setupCurlOptsFromFile(string $file = null)
+    private function setupCurlOptsFromFile($file = null)
     {
-        $file = is_null($file) ? getenv("HOME") . "/.config/jaggedsoft/php-binance-api.json" : $file;
+        $file = $file === null ? getenv("HOME") . "/.config/jaggedsoft/php-binance-api.json" : $file;
 
         if (count($this->curlOpts) > 0) {
             return;
@@ -166,9 +160,9 @@ class API
      *
      * @return null
      */
-    private function setupProxyConfigFromFile(string $file = null)
+    private function setupProxyConfigFromFile($file = null)
     {
-        $file = is_null($file) ? getenv("HOME") . "/.config/jaggedsoft/php-binance-api.json" : $file;
+        $file = $file === null ? getenv("HOME") . "/.config/jaggedsoft/php-binance-api.json" : $file;
 
         if (is_null($this->proxyConf) === false) {
             return;
@@ -224,7 +218,7 @@ class API
      * @param $flags array addtional options for order type
      * @return array with error message or the order details
      */
-    public function buy(string $symbol, $quantity, $price, string $type = "LIMIT", array $flags = [])
+    public function buy($symbol, $quantity, $price, $type = "LIMIT", array $flags = [])
     {
         return $this->order("BUY", $symbol, $quantity, $price, $type, $flags);
     }
@@ -241,7 +235,7 @@ class API
      * @param $flags array config
      * @return array with error message or empty or the order details
      */
-    public function buyTest(string $symbol, $quantity, $price, string $type = "LIMIT", array $flags = [])
+    public function buyTest($symbol, $quantity, $price, $type = "LIMIT", array $flags = [])
     {
         return $this->order("BUY", $symbol, $quantity, $price, $type, $flags, true);
     }
@@ -271,7 +265,7 @@ class API
      * @param $flags array addtional options for order type
      * @return array with error message or the order details
      */
-    public function sell(string $symbol, $quantity, $price, string $type = "LIMIT", array $flags = [])
+    public function sell($symbol, $quantity, $price, $type = "LIMIT", array $flags = [])
     {
         return $this->order("SELL", $symbol, $quantity, $price, $type, $flags);
     }
@@ -288,7 +282,7 @@ class API
      * @param $flags array config
      * @return array with error message or empty or the order details
      */
-    public function sellTest(string $symbol, $quantity, $price, string $type = "LIMIT", array $flags = [])
+    public function sellTest($symbol, $quantity, $price, $type = "LIMIT", array $flags = [])
     {
         return $this->order("SELL", $symbol, $quantity, $price, $type, $flags, true);
     }
@@ -304,7 +298,7 @@ class API
      * @param $flags array addtional options for order type
      * @return array with error message or the order details
      */
-    public function marketBuy(string $symbol, $quantity, array $flags = [])
+    public function marketBuy($symbol, $quantity, array $flags = [])
     {
         return $this->order("BUY", $symbol, $quantity, 0, "MARKET", $flags);
     }
@@ -319,7 +313,7 @@ class API
      * @param $flags array addtional options for order type
      * @return array with error message or the order details
      */
-    public function marketBuyTest(string $symbol, $quantity, array $flags = [])
+    public function marketBuyTest($symbol, $quantity, array $flags = [])
     {
         return $this->order("BUY", $symbol, $quantity, 0, "MARKET", $flags, true);
     }
@@ -335,7 +329,7 @@ class API
      * @param $flags array addtional options for order type
      * @return array with error message or the order details
      */
-    public function marketSell(string $symbol, $quantity, array $flags = [])
+    public function marketSell($symbol, $quantity, array $flags = [])
     {
         return $this->order("SELL", $symbol, $quantity, 0, "MARKET", $flags);
     }
@@ -350,7 +344,7 @@ class API
      * @param $flags array addtional options for order type
      * @return array with error message or the order details
      */
-    public function marketSellTest(string $symbol, $quantity, array $flags = [])
+    public function marketSellTest($symbol, $quantity, array $flags = [])
     {
         return $this->order("SELL", $symbol, $quantity, 0, "MARKET", $flags, true);
     }
@@ -367,7 +361,7 @@ class API
      * @return array with error message or the order details
      * @throws \Exception
      */
-    public function cancel(string $symbol, $orderid, $flags = [])
+    public function cancel($symbol, $orderid, $flags = [])
     {
         $params = [
             "symbol" => $symbol,
@@ -387,7 +381,7 @@ class API
      * @return array with error message or the order details
      * @throws \Exception
      */
-    public function orderStatus(string $symbol, $orderid)
+    public function orderStatus($symbol, $orderid)
     {
         return $this->httpRequest("v3/order", "GET", [
             "symbol" => $symbol,
@@ -405,10 +399,10 @@ class API
      * @return array with error message or the order details
      * @throws \Exception
      */
-    public function openOrders(string $symbol = null)
+    public function openOrders($symbol = null)
     {
         $params = [];
-        if (is_null($symbol) != true) {
+        if ($symbol !== null) {
             $params = [
                 "symbol" => $symbol,
             ];
@@ -427,7 +421,7 @@ class API
      * @return array with error message or array of orderDetails array
      * @throws \Exception
      */
-    public function orders(string $symbol, int $limit = 500, int $fromOrderId = 1)
+    public function orders($symbol, $limit = 500, $fromOrderId = 1)
     {
         return $this->httpRequest("v3/allOrders", "GET", [
             "symbol" => $symbol,
@@ -450,7 +444,7 @@ class API
      * @return array with error message or array of orderDetails array
      * @throws \Exception
      */
-    public function history(string $symbol, int $limit = 500, int $fromTradeId = -1)
+    public function history($symbol, $limit = 500, $fromTradeId = -1)
     {
         $parameters = [
             "symbol" => $symbol,
@@ -525,7 +519,7 @@ class API
      * @return array with error message or array transaction
      * @throws \Exception
      */
-    public function withdraw(string $asset, string $address, $amount, $addressTag = null)
+    public function withdraw($asset, $address, $amount, $addressTag = null)
     {
         $options = [
             "asset" => $asset,
@@ -534,7 +528,7 @@ class API
             "wapi" => true,
             "name" => "API Withdraw",
         ];
-        if (is_null($addressTag) === false && is_empty($addressTag) === false) {
+        if ($addressTag === null && empty($addressTag) === false) {
             $options['addressTag'] = $addressTag;
         }
         return $this->httpRequest("v3/withdraw.html", "POST", $options, true);
@@ -549,7 +543,7 @@ class API
      * @return array with error message or array deposit address information
      * @throws \Exception
      */
-    public function depositAddress(string $asset)
+    public function depositAddress($asset)
     {
         $params = [
             "wapi" => true,
@@ -570,7 +564,7 @@ class API
      * @return array with error message or array deposit history information
      * @throws \Exception
      */
-    public function depositHistory(string $asset = null, array $params = [])
+    public function depositHistory($asset = null, array $params = [])
     {
         $params["wapi"] = true;
         if (is_null($asset) === false) {
@@ -591,7 +585,7 @@ class API
      * @return array with error message or array deposit history information
      * @throws \Exception
      */
-    public function withdrawHistory(string $asset = null, array $params = [])
+    public function withdrawHistory($asset = null, array $params = [])
     {
         $params["wapi"] = true;
         if (is_null($asset) === false) {
@@ -609,7 +603,7 @@ class API
      * @return array with error message or array containing withdrawFee
      * @throws \Exception
      */
-    public function withdrawFee(string $asset)
+    public function withdrawFee($asset)
     {
         $params = [
             "wapi" => true,
@@ -639,7 +633,7 @@ class API
      * @return array with error message or array with symbol price
      * @throws \Exception
      */
-    public function price(string $symbol)
+    public function price($symbol)
     {
         $ticker = $this->httpRequest("v3/ticker/price", "GET", ["symbol" => $symbol]);
 
@@ -681,7 +675,7 @@ class API
      * @return array with error message or array of prevDay change
      * @throws \Exception
      */
-    public function prevDay(string $symbol = null)
+    public function prevDay($symbol = null)
     {
         $additionalData = [];
         if (is_null($symbol) === false) {
@@ -701,7 +695,7 @@ class API
      * @return array with error message or array of market history
      * @throws \Exception
      */
-    public function aggTrades(string $symbol)
+    public function aggTrades($symbol)
     {
         return $this->tradesData($this->httpRequest("v1/aggTrades", "GET", [
             "symbol" => $symbol,
@@ -717,7 +711,7 @@ class API
      * @return array with error message or array of market depth
      * @throws \Exception
      */
-    public function depth(string $symbol)
+    public function depth($symbol)
     {
         if (isset($symbol) === false || is_string($symbol) === false) {
             // WPCS: XSS OK.
@@ -841,7 +835,7 @@ class API
      * @return array containing the response
      * @throws \Exception
      */
-    private function httpRequest(string $url, string $method = "GET", array $params = [], bool $signed = false)
+    private function httpRequest($url, $method = "GET", array $params = [], $signed = false)
     {
         if (function_exists('curl_init') === false) {
             throw new \Exception("Sorry cURL is not installed!");
@@ -972,7 +966,7 @@ class API
      * @return array containing the response
      * @throws \Exception
      */
-    public function order(string $side, string $symbol, $quantity, $price, string $type = "LIMIT", array $flags = [], bool $test = false)
+    public function order($side, $symbol, $quantity, $price, $type = "LIMIT", array $flags = [],  $test = false)
     {
         $opt = [
             "symbol" => $symbol,
@@ -984,7 +978,7 @@ class API
 
         // someone has preformated there 8 decimal point double already
         // dont do anything, leave them do whatever they want
-        if (gettype($price) !== "string") {
+        if (!is_string($price)) {
             // for every other type, lets format it appropriately
             $price = number_format($price, 8, '.', '');
         }
@@ -1034,7 +1028,7 @@ class API
      * @return array containing the response
      * @throws \Exception
      */
-    public function candlesticks(string $symbol, string $interval = "5m", int $limit = null, $startTime = null, $endTime = null)
+    public function candlesticks($symbol, $interval = "5m", $limit = null, $startTime = null, $endTime = null)
     {
         if (!isset($this->charts[$symbol])) {
             $this->charts[$symbol] = [];
@@ -1247,7 +1241,7 @@ class API
      * @param $ticks array of the canbles array
      * @return array object of the chartdata
      */
-    private function chartData(string $symbol, string $interval, array $ticks)
+    private function chartData($symbol, $interval, array $ticks)
     {
         if (!isset($this->info[$symbol])) {
             $this->info[$symbol] = [];
@@ -1392,19 +1386,19 @@ class API
      * @param $include_volume bool for inclusion of volume
      * @return array highchart data
      */
-    public function highstock(array $chart, bool $include_volume = false)
+    public function highstock(array $chart, $include_volume = false)
     {
         $array = [];
         foreach ($chart as $timestamp => $obj) {
             $line = [
                 $timestamp,
-                floatval($obj['open']),
-                floatval($obj['high']),
-                floatval($obj['low']),
-                floatval($obj['close']),
+                (float) $obj['open'],
+                (float) $obj['high'],
+                (float) $obj['low'],
+                (float) $obj['close'],
             ];
             if ($include_volume) {
-                $line[] = floatval($obj['volume']);
+                $line[] = (float) $obj['volume'];
             }
 
             $array[] = $line;
@@ -1484,7 +1478,7 @@ class API
      * @param $json array of the depth infomration
      * @return array of the depth information
      */
-    private function depthData(string $symbol, array $json)
+    private function depthData($symbol, array $json)
     {
         $bids = $asks = [];
         foreach ($json['bids'] as $obj) {
@@ -1540,7 +1534,7 @@ class API
             'G',
             'T',
         );
-        return round(pow(1024, $base - floor($base)), 2) . ' ' . $suffixes[floor($base)];
+        return round(1024 ** ($base - floor($base)), 2) . ' ' . $suffixes[floor($base)];
     }
 
     /**
@@ -1563,7 +1557,7 @@ class API
      *
      * @return null
      */
-    public function addToTransfered(int $int)
+    public function addToTransfered($int)
     {
         $this->transfered += $int;
         $this->requestCount++;
@@ -1614,7 +1608,7 @@ class API
      * @param \stdClass $json object time
      * @return null
      */
-    private function chartHandler(string $symbol, string $interval, \stdClass $json)
+    private function chartHandler($symbol, $interval, \stdClass $json)
     {
         if (!$this->info[$symbol][$interval]['firstOpen']) { // Wait for /kline to finish loading
             $this->chartQueue[$symbol][$interval][] = $json;
@@ -1651,7 +1645,7 @@ class API
      * @param $limit int depth
      * @return null
      */
-    public function sortDepth(string $symbol, int $limit = 11)
+    public function sortDepth($symbol, $limit = 11)
     {
         $bids = $this->depthCache[$symbol]['bids'];
         $asks = $this->depthCache[$symbol]['asks'];
@@ -1883,7 +1877,7 @@ class API
      * @return null
      * @throws \Exception
      */
-    public function chart($symbols, string $interval = "30m", callable $callback, $limit = 500)
+    public function chart($symbols, $interval = "30m", callable $callback, $limit = 500)
     {
         if (!is_array($symbols)) {
             $symbols = [
@@ -1964,7 +1958,7 @@ class API
      * @return null
      * @throws \Exception
      */
-    public function kline($symbols, string $interval = "30m", callable $callback)
+    public function kline($symbols, $interval = "30m", callable $callback)
     {
         if (!is_array($symbols)) {
             $symbols = [
